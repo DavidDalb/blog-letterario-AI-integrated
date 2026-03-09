@@ -7,33 +7,35 @@ public class Recensione {
 	//Attributi
 	private Long id;
 	
-	private String titoloLibro;
+	private Libro libro;
+	
 	private int valutazioneStelle;
-	private String contenuto;
-	private LocalDateTime dataCreazione;
+    private String contenuto;
+    private LocalDateTime dataCreazione;
 	
 	//Costruttori
 	public Recensione(){}
 	
-	public Recensione(String titoloLibro, int valutazioneStelle, String contenuto, LocalDateTime dataCreazione){
+	public Recensione(int valutazioneStelle, String contenuto, LocalDateTime dataCreazione){
 		
-		this.titoloLibro = titoloLibro;
+		
 		this.valutazioneStelle = valutazioneStelle;
 		this.contenuto = contenuto;
 		this.dataCreazione = dataCreazione;
 	}
 	//Getter & Setter
 
-	public String getTitoloLibro() {
-		return titoloLibro;
-	}
-
-	public void setTitoloLibro(String titoloLibro) {
-		this.titoloLibro = titoloLibro;
-	}
 
 	public int getValutazioneStelle() {
 		return valutazioneStelle;
+	}
+
+	public Libro getLibro() {
+		return libro;
+	}
+
+	public void setLibro(Libro libro) {
+		this.libro = libro;
 	}
 
 	public void setValutazioneStelle(int valutazioneStelle) {
@@ -58,9 +60,11 @@ public class Recensione {
 
 	@Override
 	public String toString() {
-		return " id: " + id + " titoloLibro: " + titoloLibro + " valutazioneStelle: " + valutazioneStelle
-				+ " contenuto: " + contenuto + " dataCreazione: " + dataCreazione;
+		return " id: " + id + " valutazioneStelle: " + valutazioneStelle + " contenuto: " + contenuto
+				+ " dataCreazione: " + dataCreazione;
 	}
+
+	
 	
 	
 }
