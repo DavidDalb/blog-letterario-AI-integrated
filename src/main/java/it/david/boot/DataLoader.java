@@ -1,5 +1,7 @@
 package it.david.boot;
 
+import java.time.LocalDateTime;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -53,6 +55,7 @@ public class DataLoader implements CommandLineRunner {
 		r1.setValutazioneStelle(4);
 		r1.setLibro(l1);
 		r1.setAutore(u1);
+		r1.setDataCreazione(LocalDateTime.now());
 		recensioneRepository.save(r1);
 		
 		System.out.println("INFO: Database popolato con successo");
