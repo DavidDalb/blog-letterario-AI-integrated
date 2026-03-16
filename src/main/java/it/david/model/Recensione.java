@@ -37,6 +37,10 @@ public class Recensione {
 	@Column(name = "data_creazione", nullable = false)
 	private LocalDateTime dataCreazione;
 
+	public void setDataCreazione(LocalDateTime dataCreazione) {
+		this.dataCreazione = dataCreazione;
+	}
+
 	public Utente getAutore() {
 		return autore;
 	}
