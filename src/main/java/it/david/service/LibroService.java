@@ -17,6 +17,7 @@ public class LibroService {
         this.libroRepository = libroRepository;
     }
 
+    //RuntimeException è usata per errori di esecuzione
     public List<Libro> findAll() {
         List<Libro> libri = libroRepository.findAll();
         if (libri.isEmpty()) {
@@ -25,6 +26,7 @@ public class LibroService {
         return libri;
     }
 
+    //IllegalArgumentException è usata per errori di validazione dei dati
     public Optional<Libro> findById(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("Id non può essere vuoto");
