@@ -1,14 +1,12 @@
 package it.david.service;
 
-public class LibroService {
-
-}
-import it.david.model.Libro;
-import it.david.repository.LibroRepository;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import it.david.model.Libro;
+import it.david.repository.LibroRepository;
 
 @Service
 public class LibroService {
