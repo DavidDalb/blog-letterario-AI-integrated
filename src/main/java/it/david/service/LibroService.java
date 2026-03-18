@@ -25,6 +25,18 @@ public class LibroService {
         return libroRepository.findById(id);
     }
 
+    public List<Libro> findByAutoreContainingIgnoreCase(String autore) {
+        return libroRepository.findByAutoreContainingIgnoreCase(autore);
+    }
+
+    public List<Libro> findByTitoloContainingIgnoreCase(String titolo) {
+        return libroRepository.findByTitoloContainingIgnoreCase(titolo);
+    }
+
+    public List<Libro> findAllByGenereContainingIgnoreCase(String genere) {
+        return libroRepository.findAllByGenereContainingIgnoreCase(genere);
+    }
+
     public Libro save(Libro libro) {
         return libroRepository.save(libro);
     }
