@@ -18,7 +18,7 @@ public class LibroService {
     }
 
     //RuntimeException è usata per errori di esecuzione
-    public List<Libro> recuperareTuttiLibri() {
+    public List<Libro> findAllBooks() {
         List<Libro> libri = libroRepository.findAll();
         if (libri.isEmpty()) {
             throw new RuntimeException("Nessun libro trovato");
@@ -27,7 +27,7 @@ public class LibroService {
     }
 
     //IllegalArgumentException è usata per errori di validazione dei dati
-    public Optional<Libro> trovareLibroPerId(Long id) {
+    public Optional<Libro> findBookById(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("Id non può essere vuoto");
         }
@@ -55,7 +55,7 @@ public class LibroService {
         return libroRepository.findAllByGenereContainingIgnoreCase(genere);
     }
 
-    public Libro salvareLibro(Libro libro) {
+    public Libro saveBook(Libro libro) {
         if (libro == null) {
             throw new IllegalArgumentException("Libro non può essere vuoto");
         }
@@ -68,4 +68,7 @@ public class LibroService {
         }
         libroRepository.deleteById(id);
     }
+}
+public Libro updateBook(Libro libro) {
+    // codice per aggiornare il libro
 }
