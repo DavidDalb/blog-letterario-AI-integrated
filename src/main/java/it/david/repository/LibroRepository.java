@@ -13,5 +13,7 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
 	List<Libro> findByAutoreContainingIgnoreCase(String autore);
 	
 	List<Libro> findByTitoloContainingIgnoreCase(String titolo);
+	
+	List<Libro> findAllByGenereContainingIgnoreCase(String genere);
 
 }
