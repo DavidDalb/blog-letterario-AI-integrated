@@ -26,6 +26,9 @@ public class LibroService {
     }
 
     public Optional<Libro> findById(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Id non può essere vuoto");
+        }
         return libroRepository.findById(id);
     }
 
