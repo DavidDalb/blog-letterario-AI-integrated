@@ -18,7 +18,7 @@ public class LibroService {
     }
 
     //RuntimeException è usata per errori di esecuzione
-    public List<Libro> findAllBooks() {
+    public List<Libro> findAll() {
         List<Libro> libri = libroRepository.findAll();
         if (libri.isEmpty()) {
             throw new RuntimeException("Nessun libro trovato");
@@ -27,48 +27,51 @@ public class LibroService {
     }
 
     //IllegalArgumentException è usata per errori di validazione dei dati
-    public Optional<Libro> findBookById(Long id) {
+    public Optional<Libro> findById(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("Id non può essere vuoto");
         }
         return libroRepository.findById(id);
     }
 
-    public List<Libro> trovareLibriPerAutore(String autore) {
+    public List<Libro> findByAutoreContainingIgnoreCase(String autore) {
         if (autore == null || autore.isEmpty()) {
             throw new IllegalArgumentException("Autore non può essere vuoto");
         }
         return libroRepository.findByAutoreContainingIgnoreCase(autore);
     }
 
-    public List<Libro> trovareLibriPerTitolo(String titolo) {
+    public List<Libro> findByTitoloContainingIgnoreCase(String titolo) {
         if (titolo == null || titolo.isEmpty()) {
             throw new IllegalArgumentException("Titolo non può essere vuoto");
         }
         return libroRepository.findByTitoloContainingIgnoreCase(titolo);
     }
 
-    public List<Libro> trovareLibriPerGenere(String genere) {
+    public List<Libro> findByGenereContainingIgnoreCase(String genere) {
         if (genere == null || genere.isEmpty()) {
             throw new IllegalArgumentException("Genere non può essere vuoto");
         }
         return libroRepository.findAllByGenereContainingIgnoreCase(genere);
     }
 
-    public Libro saveBook(Libro libro) {
+    public Libro save(Libro libro) {
         if (libro == null) {
             throw new IllegalArgumentException("Libro non può essere vuoto");
         }
         return libroRepository.save(libro);
     }
 
-    public void eliminareLibroPerId(Long id) {
+    public void deleteById(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("Id non può essere vuoto");
         }
         libroRepository.deleteById(id);
     }
 }
-public Libro updateBook(Libro libro) {
-    // codice per aggiornare il libro
+public Libro update(Libro libro) {
+    if (libro == null) {
+        throw new IllegalArgumentException("Libro non può essere vuoto");
+    }
+    return libroRepository.save(libro);
 }
