@@ -36,9 +36,16 @@ public class Utente {
 		this.username = username;
 		this.email = email;
 	}
-
 	public String getUsername() {
 		return username;
+	}
+	// Necessario per MapStruct: permette al Bean Mapper di popolare i campi
+	public void setId(Long id) {
+		this.id = id;
+	}
+	// Necessario per MapStruct: permette al Bean Mapper di popolare i campi
+	public void setRecensioni(List<Recensione> recensioni) {
+		this.recensioni = recensioni;
 	}
 
 	public void setUsername(String username) {

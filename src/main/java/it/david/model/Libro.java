@@ -24,7 +24,7 @@ public class Libro {
 	private String autore;
 	private String genere;
 
-	@OneToMany(mappedBy = "libro",cascade = CascadeType.ALL,orphanRemoval = true)
+	@OneToMany(mappedBy = "libro", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Recensione> recensioni = new ArrayList<>();
 
 	// Costruttori
@@ -70,6 +70,16 @@ public class Libro {
 
 	public Long getId() {
 		return id;
+	}
+
+	// Necessario per MapStruct: permette al Bean Mapper di popolare i campi
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	// Necessario per MapStruct: permette al Bean Mapper di popolare i campi
+	public void setRecensioni(List<Recensione> recensioni) {
+		this.recensioni = recensioni;
 	}
 
 	@Override

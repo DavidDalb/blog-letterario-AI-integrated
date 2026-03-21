@@ -37,18 +37,6 @@ public class Recensione {
 	@Column(name = "data_creazione", nullable = false)
 	private LocalDateTime dataCreazione;
 
-	public void setDataCreazione(LocalDateTime dataCreazione) {
-		this.dataCreazione = dataCreazione;
-	}
-
-	public Utente getAutore() {
-		return autore;
-	}
-
-	public void setAutore(Utente autore) {
-		this.autore = autore;
-	}
-
 	// Costruttori
 	public Recensione() {
 	}
@@ -59,10 +47,17 @@ public class Recensione {
 		this.contenuto = contenuto;
 		this.dataCreazione = dataCreazione;
 	}
+
+	
 	// Getter & Setter
 
 	public int getValutazioneStelle() {
 		return valutazioneStelle;
+	}
+
+	// Necessario per MapStruct: permette al Bean Mapper di popolare i campi
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Libro getLibro() {
@@ -91,6 +86,18 @@ public class Recensione {
 
 	public LocalDateTime getDataCreazione() {
 		return dataCreazione;
+	}
+
+	public void setDataCreazione(LocalDateTime dataCreazione) {
+		this.dataCreazione = dataCreazione;
+	}
+
+	public Utente getAutore() {
+		return autore;
+	}
+
+	public void setAutore(Utente autore) {
+		this.autore = autore;
 	}
 
 	@Override
