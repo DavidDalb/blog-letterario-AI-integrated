@@ -12,6 +12,7 @@ import it.david.model.Libro;
 import it.david.repository.LibroRepository;
                                                              //*SNELLIRE IL CODICE (prendi spunto da recensioneService)
 @Service
+@Transactional(readOnly = true)
 public class LibroService {
 
 	private final LibroRepository libroRepository;
@@ -87,6 +88,7 @@ public class LibroService {
 		
 
 	//DTO non necessario perchè il metodo non deve restituire niente
+	@Transactional
 	public void deleteLibroById(Long id) {
 		if (id == null) {
 			throw new IllegalArgumentException("Id non può essere vuoto");
