@@ -16,20 +16,22 @@ public class AiService {
     private final ChatClient chatClient;
     private final LibroRepository libroRepository;
 
-    
+    // Spring AI inietta un Builder non inietta direttamente ChatClient
     public AiService(ChatClient.Builder chatClientBuilder, LibroRepository libroRepository) {
-        this.chatClient = chatClientBuilder.build();
+        this.chatClient = chatClientBuilder.build();   // .build() assembla il ChatClient con i dati in application.properties (api-key, modello ecc.)                                        
         this.libroRepository = libroRepository;
     }
 
     // Metodo generico
     public String generaMessaggio(String messaggio) {
         return chatClient.prompt()
-                .user(messaggio)
-                .call()
-                .content();
+        		.user(messaggio)  // messaggio utente
+                .call()           // invia a Gemini
+                .content();       // estrae solo il testo
+
     }
 
+    //Prompt con segnaposti {}
     public String generaRecensioneLibro(Long libroId) {
         Libro libro = libroRepository.findById(libroId)
                 .orElseThrow(() -> new RuntimeException("Libro con ID " + libroId + " non trovato"));
@@ -41,13 +43,13 @@ public class AiService {
                 COMPITO: Genera una recensione professionale di 100 parole
                 """;
 
+     // Sostituisce i segnaposto con i valori reali del libro
         PromptTemplate template = new PromptTemplate(testoPrompt);
         Prompt promptPronto = template.create(Map.of(
                 "titolo", libro.getTitolo(),
                 "autore", libro.getAutore(),
                 "genere", libro.getGenere()
         ));
-
         return chatClient.prompt(promptPronto)
                 .call()
                 .content();
