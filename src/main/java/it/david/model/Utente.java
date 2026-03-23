@@ -24,6 +24,8 @@ public class Utente {
 	private String username;
 	@Column(nullable = true, unique = true)
 	private String email;
+	@Column(nullable = false)
+	private String password;
 
 	@OneToMany(mappedBy = "autore", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Recensione> recensioni = new ArrayList<>();
@@ -50,6 +52,14 @@ public class Utente {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public List<Recensione> getRecensioni() {
