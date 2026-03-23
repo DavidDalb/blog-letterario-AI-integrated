@@ -13,7 +13,7 @@ public interface UtenteMapper {
 	
 	UtenteDTO toDto(Utente entity);
 	
-	@Mapping(target = "email",ignore = true)
+
 	@Mapping(target = "recensioni",ignore = true)
 	Utente toEntity(UtenteDTO dto);
 	
