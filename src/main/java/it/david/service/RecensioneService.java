@@ -70,12 +70,16 @@ public class RecensioneService {
 		Libro libro = libroRepository.findById(recensioneDto.getLibroId())
 				.orElseThrow(() -> new IllegalArgumentException("Libro non trovato"));
 
+		
+		Utente utente = utenteRepository.findById(recensioneDto.getUtenteId())
+	            .orElseThrow(() -> new IllegalArgumentException("Utente non trovato"));
 		// Da DTO ad Entity perchè non ha ancora un Id e il repo accetta solo entity
-		// 'Recensione'
+				// 'Recensione'
 		Recensione recensioneDaSalvare = recensioneMapper.toEntity(recensioneDto);
 		// Per collegare la recensione al libro, altrimenti la tabella libro_id in
 		// recensioni.model sarà null
 		recensioneDaSalvare.setLibro(libro);
+		recensioneDaSalvare.setAutore(utente);
 		// Salvando in questo modo ottiene un Id
 		Recensione RecensioneSalvato = recensioneRepository.save(recensioneDaSalvare);
 
