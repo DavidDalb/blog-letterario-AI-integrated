@@ -22,13 +22,10 @@ import it.david.service.RecensioneService;
 @RequestMapping("/api/v1/recensioni")
 public class RecensioneController {
 
-    private final LibroService libroService;
-
-	private final RecensioneService recensioneService;
+    private final RecensioneService recensioneService;
 	
 	public RecensioneController(RecensioneService recensioneService, LibroService libroService) {
 		this.recensioneService = recensioneService;
-		this.libroService = libroService;
 		
 	}
 	@GetMapping
