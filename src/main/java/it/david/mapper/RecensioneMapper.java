@@ -12,10 +12,13 @@ import org.mapstruct.Mapping;
 public interface RecensioneMapper {
 
  
-	//Converte un Entity in DTO
+	 //Converte un Entity in DTO
+	 //estrae solo gli ID dagli oggetti annidati
+    @Mapping(target = "libroId", source = "libro.id")    // libro.getId() → libroId
+    @Mapping(target = "utenteId", source = "autore.id")  // autore.getId() → utenteId
     RecensioneDTO toDto(Recensione entity);
 
-    //Per ignorare i campi intenzionalmente
+    //ignore per ignorare i campi intenzionalmente
     @Mapping(target = "autore", ignore = true)
     @Mapping(target = "libro", ignore = true)
     Recensione toEntity(RecensioneDTO dto);     //<--Converte un DTO in Entity
