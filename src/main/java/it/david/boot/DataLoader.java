@@ -38,6 +38,7 @@ public class DataLoader implements CommandLineRunner {
 		Utente u1 = new Utente();
 		u1.setUsername("Pasquale");
 		u1.setEmail("Pasquale@test.com");
+		u1.setPassword("password");
 		utenteRepository.save(u1);
 
 		Libro l1 = new Libro();
