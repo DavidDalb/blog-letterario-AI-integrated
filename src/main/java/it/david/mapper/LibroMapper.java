@@ -11,7 +11,7 @@ import it.david.model.Libro;
 @Mapper(componentModel = "spring")
 public interface LibroMapper {
 
-    // Istanza del mapper (se non si usa Spring)
+    // Istanza del mapper (se non si usa Spring).
     // LibroMapper INSTANCE = Mappers.getMapper(LibroMapper.class);
 
     LibroDTO toDto(Libro entity);
