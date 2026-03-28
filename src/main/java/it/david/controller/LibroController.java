@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.david.dto.LibroDTO;
 import it.david.service.LibroService;
+import jakarta.validation.Valid;
 
 //Rest controller per restituire dati json
 @RestController
@@ -57,8 +58,8 @@ public class LibroController {
 		return ResponseEntity.ok(libri);
 
 	}
-	@PostMapping                             //Per accettare JSON
-	public ResponseEntity<LibroDTO> createLibro(@RequestBody LibroDTO libroDto) {
+	@PostMapping                              //@Valid Serve a Validare con i parametri Validation dei DTO. @RequestBody Per accettare JSON 
+	public ResponseEntity<LibroDTO> createLibro(@Valid @RequestBody LibroDTO libroDto) {
 		LibroDTO libro = libroService.saveLibro(libroDto);
 		
 		// Uso 'new ResponseEntity' perché voglio restituire il corpo del libro con lo stato 201 senza l'obbligo
@@ -77,9 +78,9 @@ public class LibroController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<LibroDTO> updateLibro(@PathVariable Long id, @RequestBody LibroDTO LibroDto) {
+	public ResponseEntity<LibroDTO> updateLibro(@PathVariable Long id, @Valid @RequestBody LibroDTO libroDto) {
 		
-		LibroDTO result = libroService.updateLibro(id, LibroDto);
+		LibroDTO result = libroService.updateLibro(id, libroDto);
 		
 		return ResponseEntity.ok(result);
 	}

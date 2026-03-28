@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import it.david.dto.RecensioneDTO;
 import it.david.service.LibroService;
 import it.david.service.RecensioneService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/recensioni")
@@ -44,8 +45,8 @@ public class RecensioneController {
 		List<RecensioneDTO> recensioni = recensioneService.findByValutazioneStelleGreaterThanEqual(valutazioneStelle);
 		return ResponseEntity.ok(recensioni);
 	}
-	 @PostMapping
-	 public ResponseEntity<RecensioneDTO> createRecensione(@RequestBody RecensioneDTO recensioneDto) {
+	 @PostMapping                                         
+	 public ResponseEntity<RecensioneDTO> createRecensione(@Valid @RequestBody RecensioneDTO recensioneDto) {
 		 RecensioneDTO recensione = recensioneService.saveRecensione(recensioneDto);
 		 return new ResponseEntity<>(recensione, HttpStatus.CREATED);
 	 }
@@ -55,7 +56,7 @@ public class RecensioneController {
 		return ResponseEntity.noContent().build();
 	}
 	@PutMapping("/{id}")
-	public ResponseEntity<RecensioneDTO> updateRecensione(@PathVariable Long id, @RequestBody RecensioneDTO recensioneDto) {
+	public ResponseEntity<RecensioneDTO> updateRecensione(@PathVariable Long id, @Valid @RequestBody RecensioneDTO recensioneDto) {
 		RecensioneDTO recensione = recensioneService.updateRecensione(id, recensioneDto);
 		return ResponseEntity.ok(recensione);
 	}

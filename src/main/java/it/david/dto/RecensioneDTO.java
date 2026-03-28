@@ -3,14 +3,32 @@ package it.david.dto;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class RecensioneDTO {
 
 	//DTO ha la struttura di una classe POJO Soltanto non contiene attributi sensibili
+	//non validata perchè viene automaticamente creata
     private Long id;
-    private int valutazioneStelle;
+    
+    
+    @Min(value = 1, message = "Il voto minimo è 1")
+    @Max(value = 5, message = "Il voto massimo è 5")
+    private int valutazioneStelle;                      //@NotNull non è applicabile ai primitivi @NotBlank funziona solo sulle stringhe
+    
+    @NotBlank(message = "La recensione non può essere vuota")
+    @Size(min = 1 , max = 300, message = "La recensione è compresa tra 1 e 300 caratteri")
     private String contenuto;
+    
+    //non validata perchè viene automaticamente creata
     private LocalDateTime dataCreazione;
+    @NotNull(message = "L'id del libro non può essere vuoto")
     private Long libroId;
+    @NotNull(message = "L'id utente non può essere vuoto")
     private Long utenteId;
 
     

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import it.david.dto.UtenteDTO;
 import it.david.service.UtenteService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/utenti")
@@ -48,13 +49,13 @@ public class UtenteController {
 		return ResponseEntity.ok(utenti);
 	}
 	@PostMapping
-	public ResponseEntity<UtenteDTO> createUtente(@RequestBody UtenteDTO utenteDto) {
+	public ResponseEntity<UtenteDTO> createUtente(@Valid @RequestBody UtenteDTO utenteDto) {
 		UtenteDTO utente = utenteService.saveUtente(utenteDto);
 		
 		return new ResponseEntity<>(utente, HttpStatus.CREATED);
 	}
 	@PutMapping("/{id}")
-	public ResponseEntity<UtenteDTO> updateUtente(@PathVariable Long id, @RequestBody UtenteDTO utenteDto) {
+	public ResponseEntity<UtenteDTO> updateUtente(@PathVariable Long id,@Valid @RequestBody UtenteDTO utenteDto) {
 		UtenteDTO utente = utenteService.updateUtente(id, utenteDto);
 		
 		return ResponseEntity.ok(utente);

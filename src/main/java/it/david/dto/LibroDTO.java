@@ -2,11 +2,25 @@ package it.david.dto;
 
 import java.util.Objects;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class LibroDTO {
 
-    private Long id;
+	//L'id non si valida, perchè lo genera il DB 
+    private Long id;                                            //Questi Validator partono quando il flusso incontra il controller
+    															//@NotNull Non va bene per le String perchè "" e " " li considera validi
+	@NotBlank(message = "Il titolo non può essere vuoto")    
+	@Size(min = 1, max = 40, message = "Il titolo deve essere tra 1 e 40 caratteri")
     private String titolo;
+	
+	@NotBlank(message = "L'autore non può essere vuoto")
+	@Size(min = 1, max = 30, message = "L'autore deve essere tra 1 e 30 caratteri")
     private String autore;
+	
+	@NotBlank(message = "Il genere non può essere vuoto")
+	@Size(min = 1, max = 30, message = "Il genere deve essere tra 1 e 30 caratteri")
     private String genere;
 
     

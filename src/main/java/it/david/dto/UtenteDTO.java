@@ -4,16 +4,27 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 public class UtenteDTO {
 
 	private Long id;
+	@NotBlank(message = "L'username non può essere vuoto")
+	@Size(min = 1, max = 20, message = "L'username è compreso tra 1 e 20 caratteri")
 	private String username;
+	@Email(flags = Pattern.Flag.CASE_INSENSITIVE ) //, regexp =  con il parametro REGEXP si può definire quali caratteri sono accettati
 	private String email;
 	
-	// Permette di ricevere soltanto la password da registrazione/login.
+	// Permette di ricevere soltanto la password da registrazione/login
 	// ma impedisce l'invio nei JSON di risposta.
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	//@Pattern
+	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)       //@Pattern è l'alternativa a parametri che non hanno Annotation dedicata
 	private String password;
+	@NotBlank(message = "La password è obbligatoria")
+	@Size(min = 6 , max = 20, message = "La password è compresa tra 6 e 20 caratteri") 
 	
 	public String getEmail() {
 		return email;
