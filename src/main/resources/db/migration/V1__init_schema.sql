@@ -1,0 +1,22 @@
+CREATE TABLE libri (
+	id BIGSERIAL PRIMARY KEY,
+	titolo VARCHAR(40) NOT NULL,
+	autore VARCHAR(30) NOT NULL,
+	genere VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE utenti(
+	id BIGSERIAL PRIMARY KEY,
+	username VARCHAR(20) UNIQUE NOT NULL,
+	email VARCHAR(100) UNIQUE NOT NULL,
+	password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE recensioni (
+	id BIGSERIAL PRIMARY KEY,
+	valutazione_stelle INT NOT NULL CHECK (valutazione_stelle >= 1 AND valutazione_stelle <= 5),
+	contenuto TEXT NOT NULL,
+	libro_id BIGINT NOT NULL REFERENCES libri(id) ON DELETE CASCADE,
+	utente_id BIGINT NOT NULL REFERENCES utenti(id) ON DELETE CASCADE,
+	data_creazione TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
