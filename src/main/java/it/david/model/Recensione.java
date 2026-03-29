@@ -28,7 +28,7 @@ public class Recensione {
 	@JoinColumn(name = "utente_id")
 	private Utente autore;
 
-	@Column(nullable = false)
+	@Column(name = "valutazione_stelle" ,nullable = false)
 	private int valutazioneStelle;
 
 	@Column(length = 2000, nullable = false)
