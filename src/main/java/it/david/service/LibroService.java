@@ -13,7 +13,7 @@ import it.david.dto.LibroDTO;
 import it.david.mapper.LibroMapper;
 import it.david.model.Libro;
 import it.david.repository.LibroRepository;
-                                                             //*SNELLIRE IL CODICE (prendi spunto da recensioneService)
+                                                             //REMINDER*SNELLIRE IL CODICE (prendi spunto da recensioneService)
 @Service
 @Transactional(readOnly = true)
 public class LibroService {
