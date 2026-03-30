@@ -1,8 +1,9 @@
 package it.david.service;
 
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page; // Import per la paginazione
+import org.springframework.data.domain.Pageable; // Import per la paginazione
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,15 +26,15 @@ public class UtenteService {
 		this.utenteMapper = utenteMapper;
 	}
 
-	public List<UtenteDTO> findAllUtenti() {
-		log.info("Richiesta di tutti gli utenti");
-		List<Utente> utenti = utenteRepository.findAll();
+	public Page<UtenteDTO> findAllUtenti(Pageable pageable) {
+		log.info("Richiesta di tutti gli utenti - Pagina {} contenente {} elementi", pageable.getPageNumber(), pageable.getPageSize());
+		Page<Utente> utenti = utenteRepository.findAll(pageable);
 		if (utenti.isEmpty()) {
 			log.warn("Nessun utente trovato nel database");
 			throw new RuntimeException("Nessun utente trovato");
 		}
-		log.info("Restituiti {} utenti", utenti.size());
-		return utenteMapper.toDtoList(utenti);
+		log.info("Restituiti {} utenti", utenti.getNumberOfElements());
+		return utenti.map(utente -> utenteMapper.toDto(utente));
 	}
 
 	public UtenteDTO findUtenteById(Long id) {
@@ -51,19 +52,19 @@ public class UtenteService {
 		return utenteMapper.toDto(utente);
 	}
 
-	public List<UtenteDTO> findByUsernameContainingIgnoreCase(String username) {
-		log.info("Ricerca utenti per username contenente: {}", username);
+	public Page<UtenteDTO> findByUsernameContainingIgnoreCase(String username, Pageable pageable) {
+		log.info("Ricerca utenti per username contenente: {} - Pagina {} contenente {} elementi", username, pageable.getPageNumber(), pageable.getPageSize());
 		if (username == null || username.isEmpty()) {
 			log.warn("Tentativo di ricerca utenti con username vuoto o nullo");
 			throw new IllegalArgumentException("Username non può essere vuoto");
 		}
-		List<Utente> utenti = utenteRepository.findByUsernameContainingIgnoreCase(username);
+		Page<Utente> utenti = utenteRepository.findByUsernameContainingIgnoreCase(username, pageable);
 		if (utenti.isEmpty()) {
 			log.warn("Nessun utente trovato con username: {}", username);
 			throw new RuntimeException("Nessun utente trovato con username: " + username);
 		}
-		log.info("Trovati {} utenti per username: {}", utenti.size(), username);
-		return utenteMapper.toDtoList(utenti);
+		log.info("Trovati {} utenti per username: {}", utenti.getNumberOfElements(), username);
+		return utenti.map(utente -> utenteMapper.toDto(utente));
 	}
 
 	@Transactional

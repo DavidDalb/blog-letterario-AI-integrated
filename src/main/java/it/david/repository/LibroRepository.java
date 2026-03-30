@@ -1,7 +1,9 @@
 package it.david.repository;
 
-import java.util.List;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,12 +12,12 @@ import it.david.model.Libro;
 @Repository
 public interface LibroRepository extends JpaRepository<Libro, Long> {
 	
-	List<Libro> findByAutoreContainingIgnoreCase(String autore);
+	//(Spring) la pagination avviene sugli elementi List. List -> Page     Pageable contiene le istruzioni ricevute dal Controller
+	Page<Libro> findByAutoreContainingIgnoreCase(String autore,Pageable pageable);
 	
-	List<Libro> findByTitoloContainingIgnoreCase(String titolo);
+	Page<Libro> findByTitoloContainingIgnoreCase(String titolo,Pageable pageable);
 	
-	List<Libro> findAllByGenereContainingIgnoreCase(String genere);
+	Page<Libro> findAllByGenereContainingIgnoreCase(String genere,Pageable pageable);
 
 	Libro findByTitoloAndAutore(String titolo, String autore);
-
-}
+}

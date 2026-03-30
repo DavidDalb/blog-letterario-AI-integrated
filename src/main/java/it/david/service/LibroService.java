@@ -1,13 +1,13 @@
 package it.david.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import it.david.dto.LibroDTO;
 import it.david.mapper.LibroMapper;
@@ -31,15 +31,16 @@ public class LibroService {
 	}
 
 	// RuntimeException è usata per errori di esecuzione
-	public List<LibroDTO> findAll() {
-		log.info("Richiesta lista di tutti i libri");
-		List<Libro> libri = libroRepository.findAll();
+	public Page<LibroDTO> findAll(Pageable pageable) {    //il service riceve Pageable dal controller
+		log.info("Richiesta libri - Pagina {} contenente {} elementi",pageable.getPageNumber(),pageable.getPageSize());//PageSize indica quanti elementi per pagina
+		Page<Libro> libri = libroRepository.findAll(pageable);
 		if (libri.isEmpty()) {
 			log.warn("Nessun libro nel database");
 			throw new RuntimeException("Nessun libro trovato");
 		}
-		log.info("Restituiti {} libri", libri.size());   //Placeholder è preferito alla concatenazione che invece spreca memoria
-		return libroMapper.toDtoList(libri);
+		log.info("Restituiti {} libri", libri.getNumberOfElements());   //Placeholder è preferito alla concatenazione che invece spreca memoria
+		//map itera su elementi page ogni oggetto e lo converte in Dto mantenendo metadati
+		return libri.map(libro -> libroMapper.toDto(libro));      //cosi facendo evitiamo di fare return new PageImpl con i parametri a mano
 	}
 
 	// IllegalArgumentException è usata per errori di validazione dei dati
@@ -57,34 +58,34 @@ public class LibroService {
 	}
 
 	// isEmpty è per i contenitori vuoti
-	public List<LibroDTO> findByAutoreContainingIgnoreCase(String autore) {
+	public Page<LibroDTO> findByAutoreContainingIgnoreCase(String autore,Pageable pageable) {
 		if (autore == null || autore.isEmpty()) {
 			log.warn("Ricerca autore con campo vuoto");
 			throw new IllegalArgumentException("Autore non può essere vuoto");
 		}
-		List<Libro> risultato = libroRepository.findByAutoreContainingIgnoreCase(autore);
-		log.info("Trovati {} libri per autore: {}",risultato.size(), autore);
-		return libroMapper.toDtoList(risultato);
+		Page<Libro> libri = libroRepository.findByAutoreContainingIgnoreCase(autore,pageable);
+		log.info("Trovati {} libri per autore: {}",libri.getNumberOfElements(), autore);
+		return libri.map(libro -> libroMapper.toDto(libro));
 	}
 
-	public List<LibroDTO> findByTitoloContainingIgnoreCase(String titolo) {
+	public Page<LibroDTO> findByTitoloContainingIgnoreCase(String titolo,Pageable pageable) {
 		if (titolo == null || titolo.isEmpty()) {
 			log.warn("Ricerca titolo con campo vuoto");
 			throw new IllegalArgumentException("Titolo non può essere vuoto");
 		}
-		List<Libro> risultato = libroRepository.findByTitoloContainingIgnoreCase(titolo);
-		log.info("Trovati {} libri per titolo: {}", risultato.size(), titolo);
-		return libroMapper.toDtoList(risultato);
+		Page<Libro> libri = libroRepository.findByTitoloContainingIgnoreCase(titolo,pageable);
+		log.info("Trovati {} libri per titolo: {}", libri.getNumberOfElements(), titolo);
+		return libri.map(libro -> libroMapper.toDto(libro));
 	}
 
-	public List<LibroDTO> findByGenereContainingIgnoreCase(String genere) {
+	public Page<LibroDTO> findByGenereContainingIgnoreCase(String genere,Pageable pageable) {
 		if (genere == null || genere.isEmpty()) {
 			log.warn("Ricerca genere con campo vuoto");
 			throw new IllegalArgumentException("Genere non può essere vuoto");
 		}
-		List<Libro> risultato = libroRepository.findAllByGenereContainingIgnoreCase(genere);
-		log.info("Trovati {} libri per genere: {}", risultato.size(), genere);
-		return libroMapper.toDtoList(risultato);
+		Page<Libro> libri = libroRepository.findAllByGenereContainingIgnoreCase(genere,pageable);
+		log.info("Trovati {} libri per genere: {}", libri.getNumberOfElements(), genere);
+		return libri.map(libro -> libroMapper.toDto(libro));
 	}
 
 	@Transactional

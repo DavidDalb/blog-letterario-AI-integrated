@@ -1,7 +1,8 @@
 package it.david.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,8 +31,9 @@ public class RecensioneController {
 		
 	}
 	@GetMapping
-	public ResponseEntity<List<RecensioneDTO>> getAll() {
-		List<RecensioneDTO> recensioni = recensioneService.findAll();
+	public ResponseEntity<Page<RecensioneDTO>> getAll(@PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
+		
+		Page<RecensioneDTO> recensioni = recensioneService.findAll(pageable);
 		return ResponseEntity.ok(recensioni);
 		
 	}
@@ -41,11 +43,14 @@ public class RecensioneController {
 		return ResponseEntity.ok(recensione);
 	}
 	@GetMapping("/search/valutazione-gte")
-	public ResponseEntity<List<RecensioneDTO>> searchByStars(@RequestParam int valutazioneStelle) {
-		List<RecensioneDTO> recensioni = recensioneService.findByValutazioneStelleGreaterThanEqual(valutazioneStelle);
+	public ResponseEntity<Page<RecensioneDTO>> searchByStars(
+			@RequestParam int valutazioneStelle,
+			@PageableDefault(page = 0, size = 10, sort = "id") Pageable pageable) {
+		
+		Page<RecensioneDTO> recensioni = recensioneService.findByValutazioneStelleGreaterThanEqual(valutazioneStelle, pageable);
 		return ResponseEntity.ok(recensioni);
 	}
-	 @PostMapping                                         
+	 @PostMapping
 	 public ResponseEntity<RecensioneDTO> createRecensione(@Valid @RequestBody RecensioneDTO recensioneDto) {
 		 RecensioneDTO recensione = recensioneService.saveRecensione(recensioneDto);
 		 return new ResponseEntity<>(recensione, HttpStatus.CREATED);

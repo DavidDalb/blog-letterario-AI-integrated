@@ -1,10 +1,11 @@
 package it.david.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,15 +40,17 @@ public class RecensioneService {
 	}
 
 	// RuntimeException è usata per errori di esecuzione
-	public List<RecensioneDTO> findAll() {
-		log.info("Richiesta di tutte le recensioni");
-		List<Recensione> recensioni = recensioneRepository.findAll();
-		if (recensioni.isEmpty()) {
-			log.warn("Nessuna recensione trovata nel database");
-			throw new RuntimeException("Nessuna recensione trovata");
+	public Page<RecensioneDTO> findAll(Pageable pageable) {
+		log.info("Richiesta di tutte le recensioni con paginazione - Pagina: {}, Dimensione: {}, Ordine: {}",
+				pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
+		Page<Recensione> recensioniPage = recensioneRepository.findAll(pageable);
+		if (!recensioniPage.hasContent()) {
+			log.warn("Nessuna recensione trovata nel database per la pagina corrente");
+			// Puoi scegliere di lanciare un'eccezione o restituire una pagina vuota.
+			// Restituisco una pagina vuota per un comportamento più standard con la paginazione.
 		}
-		log.info("Restituite {} recensioni", recensioni.size());
-		return recensioneMapper.toDtoList(recensioni);
+		log.info("Restituite {} recensioni su {} totali per la pagina corrente", recensioniPage.getNumberOfElements(), recensioniPage.getTotalElements());
+		return recensioniPage.map(recensione -> recensioneMapper.toDto(recensione));
 	}
 
 	// IllegalArgumentException è usata per errori di validazione dei dati
@@ -67,15 +70,17 @@ public class RecensioneService {
 		return recensioneMapper.toDto(recensione);
 	}
 
-	public List<RecensioneDTO> findByValutazioneStelleGreaterThanEqual(int valutazioneStelle) {
-		log.info("Ricerca recensioni con valutazione stelle maggiore o uguale a {}", valutazioneStelle);
+	public Page<RecensioneDTO> findByValutazioneStelleGreaterThanEqual(int valutazioneStelle, Pageable pageable) {
+		log.info("Ricerca recensioni con valutazione stelle maggiore o uguale a {} con paginazione - Pagina: {}, Dimensione: {}, Ordine: {}",
+				valutazioneStelle, pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
 		if (valutazioneStelle <= 0 || valutazioneStelle > 5) {
 			log.warn("Tentativo di ricerca con valutazione stelle non valida: {}", valutazioneStelle);
 			throw new IllegalArgumentException("Il voto non può essere minore di 0 o maggiore di 5");
 		}
-		List<Recensione> risultato = recensioneRepository.findByValutazioneStelleGreaterThanEqual(valutazioneStelle);
-		log.info("Trovate {} recensioni con valutazione stelle maggiore o uguale a {}", risultato.size(), valutazioneStelle);
-		return recensioneMapper.toDtoList(risultato);
+		Page<Recensione> recensioniPage = recensioneRepository.findByValutazioneStelleGreaterThanEqual(valutazioneStelle, pageable);
+		log.info("Trovate {} recensioni su {} totali con valutazione stelle maggiore o uguale a {} per la pagina corrente",
+				recensioniPage.getNumberOfElements(), recensioniPage.getTotalElements(), valutazioneStelle);
+		return recensioniPage.map(recensione -> recensioneMapper.toDto(recensione));
 	}
 
 	// (Di spring) se durante il metodo succede un errore fa rollback

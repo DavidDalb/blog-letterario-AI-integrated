@@ -1,7 +1,8 @@
 package it.david.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,10 +30,9 @@ public class UtenteController {
 	}
 	
 	@GetMapping
-	public ResponseEntity <List<UtenteDTO>> getAll() {
-		List<UtenteDTO> utenti = utenteService.findAllUtenti();
+	public ResponseEntity <Page<UtenteDTO>> getAll(@PageableDefault(page = 0, size = 10, sort = "username") Pageable pageable) {
+		Page<UtenteDTO> utenti = utenteService.findAllUtenti(pageable);
 		return ResponseEntity.ok(utenti);
-		
 	}
 	
 	@GetMapping("/{id}")
@@ -43,8 +43,8 @@ public class UtenteController {
 	}
 
 	@GetMapping("/search/username")
-	public ResponseEntity<List<UtenteDTO>> searchByUsername(@RequestParam String username) {
-		List<UtenteDTO> utenti = utenteService.findByUsernameContainingIgnoreCase(username);
+	public ResponseEntity<Page<UtenteDTO>> searchByUsername(@RequestParam String username, @PageableDefault(size = 10) Pageable pageable) {
+		Page<UtenteDTO> utenti = utenteService.findByUsernameContainingIgnoreCase(username, pageable);
 		
 		return ResponseEntity.ok(utenti);
 	}

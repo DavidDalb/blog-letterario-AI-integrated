@@ -1,7 +1,9 @@
 package it.david.controller;
 
-import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,9 +32,9 @@ public class LibroController {
 	}
 
 	@GetMapping // Userà l'url di default
-	public ResponseEntity<List<LibroDTO>> getAll() {
-		List<LibroDTO> libri = libroService.findAll();
-		// Analogamente come un system.out.print ma es. per un frontendista
+	public ResponseEntity<Page<LibroDTO>> getAll(@PageableDefault(page = 0, size = 10, sort = "titolo") Pageable pageable) {
+		Page<LibroDTO> libri = libroService.findAll(pageable);
+		// Manda una risposta codice 200  
 		return ResponseEntity.ok(libri);
 	}
 
@@ -41,20 +43,20 @@ public class LibroController {
 		LibroDTO libro = libroService.findById(id);
 		return ResponseEntity.ok(libro);
 	}
-                                 
+
 	@GetMapping("/search/autore")                      // api/v1/libri/search?autore=...   //'autore' in entrata è name convention
-	public ResponseEntity<List<LibroDTO>> searchByAutore(@RequestParam String autore) {
-		List<LibroDTO> libri = libroService.findByAutoreContainingIgnoreCase(autore);
+	public ResponseEntity<Page<LibroDTO>> searchByAutore(@RequestParam String autore, @PageableDefault(size = 10) Pageable pageable) {
+		Page<LibroDTO> libri = libroService.findByAutoreContainingIgnoreCase(autore, pageable);
 		return ResponseEntity.ok(libri);
 	}
-	@GetMapping("/search/titolo") 
-	public ResponseEntity<List<LibroDTO>> searchByTitolo(@RequestParam String titolo) {
-		List<LibroDTO> libri = libroService.findByTitoloContainingIgnoreCase(titolo);
+	@GetMapping("/search/titolo")
+	public ResponseEntity<Page<LibroDTO>> searchByTitolo(@RequestParam String titolo, @PageableDefault(size = 10) Pageable pageable) {
+		Page<LibroDTO> libri = libroService.findByTitoloContainingIgnoreCase(titolo, pageable);
 		return ResponseEntity.ok(libri);
 }
-	@GetMapping("/search/genere") 
-	public ResponseEntity<List<LibroDTO>> searchByGenere(@RequestParam String genere) {
-		List<LibroDTO> libri = libroService.findByGenereContainingIgnoreCase(genere);
+	@GetMapping("/search/genere")
+	public ResponseEntity<Page<LibroDTO>> searchByGenere(@RequestParam String genere, @PageableDefault(size = 10) Pageable pageable) {
+		Page<LibroDTO> libri = libroService.findByGenereContainingIgnoreCase(genere, pageable);
 		return ResponseEntity.ok(libri);
 
 	}
