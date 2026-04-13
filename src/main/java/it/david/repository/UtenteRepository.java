@@ -1,5 +1,7 @@
 package it.david.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +20,6 @@ public interface UtenteRepository extends JpaRepository<Utente, Long>{
 	
 	// Verifica se l'email è già usata da altri utenti, IdNot esclude L'id stesso, altrimenti sarebbe true con se stesso.
 	boolean existsByEmailAndIdNot(String email, Long id);
+	
+	Optional<Utente> findByEmail(String email);
 }

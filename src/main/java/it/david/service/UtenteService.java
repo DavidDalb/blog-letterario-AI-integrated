@@ -1,16 +1,34 @@
 package it.david.service;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page; // Import per la paginazione
 import org.springframework.data.domain.Pageable; // Import per la paginazione
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.david.dto.UtenteDTO;
+import it.david.dto.auth.JwtResponse;
+import it.david.dto.auth.LoginRequest;
+import it.david.dto.auth.RegisterRequest;
 import it.david.mapper.UtenteMapper;
+import it.david.model.Eruolo;
+import it.david.model.Ruolo;
 import it.david.model.Utente;
+import it.david.repository.RuoloRepository;
 import it.david.repository.UtenteRepository;
+import it.david.security.jwt.JwtUtils;
 
 @Service
 @Transactional(readOnly = true)
@@ -20,12 +38,81 @@ public class UtenteService {
 
 	private final UtenteRepository utenteRepository;
 	private final UtenteMapper utenteMapper;
+	private final RuoloRepository ruoloRepository;
+	
+	private final PasswordEncoder passwordEncoder;
+	private final AuthenticationManager authenticationManager;
+	private final JwtUtils jwtUtils;
 
-	public UtenteService(UtenteRepository utenteRepository, UtenteMapper utenteMapper) {
+	
+	public UtenteService(UtenteRepository utenteRepository, UtenteMapper utenteMapper, RuoloRepository ruoloRepository,
+			PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
+		
 		this.utenteRepository = utenteRepository;
 		this.utenteMapper = utenteMapper;
+		this.ruoloRepository = ruoloRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.authenticationManager = authenticationManager;
+		this.jwtUtils = jwtUtils;
 	}
 
+	
+
+	@Transactional
+	public UtenteDTO register(RegisterRequest registrationDto) {
+		log.info("Tentativo di registrazione dell'utente {}", registrationDto.getUsername());
+	
+		if (utenteRepository.existsByEmail(registrationDto.getEmail())) {
+			log.warn("l'email {} esiste gia", registrationDto.getEmail());
+			throw new IllegalArgumentException("Un utente con questa email esiste gia");
+		}
+		Utente utenteNuovo = utenteMapper.toEntity(registrationDto);
+		utenteNuovo.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
+		
+		Set<Ruolo> ruoliDaSalvareDB = new HashSet<>();
+		Set<String> ruoliUtenteRequest = registrationDto.getRuoli();
+		
+		if(ruoliUtenteRequest == null || ruoliUtenteRequest.isEmpty()) {
+			//Se il ruolo non esiste assegna ROLE_UTENTE DI DEFAULT
+			Ruolo ruoloUtente = ruoloRepository.findByRuolo(Eruolo.ROLE_UTENTE)
+			.orElseThrow(() -> new RuntimeException("Ruolo non trovato"));
+			ruoliDaSalvareDB.add(ruoloUtente);
+		}else {
+			for(String ruolo : ruoliUtenteRequest) {
+				Eruolo enumCercata = Eruolo.valueOf("ROLE_" + ruolo.toUpperCase());
+				
+				Ruolo ruoloTrovato = ruoloRepository.findByRuolo(enumCercata)
+			    .orElseThrow(() -> new RuntimeException("Ruolo nel database non trovato"));
+				
+				ruoliDaSalvareDB.add(ruoloTrovato);
+			}
+		}
+		utenteNuovo.setRuoli(ruoliDaSalvareDB);
+		Utente utenteSalvato = utenteRepository.save(utenteNuovo);
+		
+		return utenteMapper.toDto(utenteSalvato);
+		
+	}
+	@Transactional
+	public JwtResponse login(LoginRequest loginRequest) {
+		UsernamePasswordAuthenticationToken authInput = new UsernamePasswordAuthenticationToken(
+				loginRequest.getUsername(),
+				loginRequest.getPassword());
+		
+		Authentication authentication = authenticationManager.authenticate(authInput);
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		
+		String jwt = jwtUtils.generateJwtToken(authentication);
+		
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		
+		List<String> roles = userDetails.getAuthorities().stream()
+                .map(authority -> authority.getAuthority())
+                .toList();
+		
+		return new JwtResponse(jwt, userDetails.getUsername(), roles);
+	}
+	
 	public Page<UtenteDTO> findAllUtenti(Pageable pageable) {
 		log.info("Richiesta di tutti gli utenti - Pagina {} contenente {} elementi", pageable.getPageNumber(), pageable.getPageSize());
 		Page<Utente> utenti = utenteRepository.findAll(pageable);
