@@ -1,8 +1,7 @@
 package it.david.dto;
 
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Set;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -18,13 +17,21 @@ public class UtenteDTO {
 	@Email(flags = Pattern.Flag.CASE_INSENSITIVE ) //, regexp =  con il parametro REGEXP si può definire quali caratteri sono accettati
 	private String email;
 	
-	// Permette di ricevere soltanto la password da registrazione/login
-	// ma impedisce l'invio nei JSON di risposta.
+	private Set<String> ruoli;
+	
+	
 	//@Pattern
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)       //@Pattern è l'alternativa a parametri che non hanno Annotation dedicata
-	private String password;
-	@NotBlank(message = "La password è obbligatoria")
-	@Size(min = 6 , max = 20, message = "La password è compresa tra 6 e 20 caratteri") 
+    //@Pattern è l'alternativa a parametri che non hanno Annotation dedicata
+	
+	public Set<String> getRuoli() {
+		return ruoli;
+	}
+
+	public void setRuoli(Set<String> ruoli) {
+		this.ruoli = ruoli;
+	}
+
+	public UtenteDTO() {}
 	
 	public String getEmail() {
 		return email;
@@ -34,15 +41,7 @@ public class UtenteDTO {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public UtenteDTO() {}
+	
 
 	public Long getId() {
 		return id;

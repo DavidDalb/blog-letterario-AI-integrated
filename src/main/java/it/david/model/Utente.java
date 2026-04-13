@@ -1,16 +1,23 @@
 package it.david.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+
 
 @Entity
 @Table(name = "utenti")
@@ -19,16 +26,23 @@ public class Utente {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
-	@Column(nullable = true, unique = true)
+    //Nullable = false è notNull, invece true può essere NULL
+	@Column(nullable = false, unique = true)
 	private String username;
-	@Column(nullable = true, unique = true)
+	@Column(nullable = false, unique = true)
 	private String email;
 	@Column(nullable = false)
 	private String password;
 
 	@OneToMany(mappedBy = "autore", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Recensione> recensioni = new ArrayList<>();
+	
+	// LAZY = Carica i ruoli dal DB solo chiamando .getRoles() (per ottimizzare)
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "utenti_ruoli",
+	joinColumns = @JoinColumn(name = "utente_id"),
+	inverseJoinColumns = @JoinColumn(name = "ruolo_id"))
+	private Set<Ruolo> ruoli = new HashSet<>();
 
 	public Utente() {
 	}
@@ -76,6 +90,16 @@ public class Utente {
 
 	public Long getId() {
 		return id;
+	}
+	
+	
+
+	public Set<Ruolo> getRuoli() {
+		return ruoli;
+	}
+
+	public void setRuoli(Set<Ruolo> ruoli) {
+		this.ruoli = ruoli;
 	}
 
 	@Override
