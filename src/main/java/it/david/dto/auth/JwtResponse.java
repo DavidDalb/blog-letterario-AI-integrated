@@ -7,15 +7,15 @@ public class JwtResponse {
 	private String token;              //Stringa Criptata
 	private String type = "Bearer";    //tipo di token. "Bearer" standard moderno
 	
-	private String username;
+	private String email;
 	//LIST: Usata in OUTPUT perché i dati sono già stati filtrati dal Set nel DB
 	private List<String> roles;
 	
 	
-	public JwtResponse(String token, String username, List<String> roles) {
+	public JwtResponse(String token, String email, List<String> roles) {
 		super();
 		this.token = token;
-		this.username = username;
+		this.email = email;
 		this.roles = roles;
 	}
 	
@@ -29,13 +29,13 @@ public class JwtResponse {
 	}
 
 
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
 
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 
