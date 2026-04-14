@@ -66,7 +66,7 @@ Assicurati di avere un'istanza PostgreSQL in esecuzione. Ti suggerisco di usare 
 ```bash
 docker run --name blog-db -e POSTGRES_DB=blog_db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=root -p 5432:5432 -d postgres:13
 ```
-Questo comando avvia un container PostgreSQL creando un database chiamato `blog_db` con utente `postgres` e password `root`, esposto sulla porta `5432`. Queste credenziali sono quelle configurate nel tuo `application.properties`.
+Questo comando avvia un container PostgreSQL creando un database chiamato `blog_db` con utente `postgres` e password `root`, esposto sulla porta `5432`. Queste credenziali sono quelle configurate in `application.properties`.
 
 ### 3. Configurazione di Ollama (per l'AI)
 
