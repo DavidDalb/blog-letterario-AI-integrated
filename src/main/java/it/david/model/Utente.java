@@ -39,7 +39,7 @@ public class Utente {
 	
 	// LAZY = Carica i ruoli dal DB solo chiamando .getRoles() (per ottimizzare)
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "utenti_ruoli",
+	@JoinTable(name = "utente_ruoli",
 	joinColumns = @JoinColumn(name = "utente_id"),
 	inverseJoinColumns = @JoinColumn(name = "ruolo_id"))
 	private Set<Ruolo> ruoli = new HashSet<>();
@@ -102,6 +102,9 @@ public class Utente {
 		this.ruoli = ruoli;
 	}
 
+	public void addRuolo(Ruolo ruolo) {
+		this.ruoli.add(ruolo);
+	}
 	@Override
 	public String toString() {
 		return " id utente: " + id + " username: " + username + " email: " + email;

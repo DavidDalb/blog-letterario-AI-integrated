@@ -1,5 +1,6 @@
 package it.david.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,9 +17,12 @@ public class Ruolo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Enumerated(EnumType.STRING) //Converte la Enum in stringa Esatta nel DB Es. ROLE_UTENTE
+	@Enumerated(EnumType.STRING)//Converte la Enum in stringa Esatta nel DB Es. ROLE_UTENTE
+	@Column(name = "nome_ruolo") //Per coerenza con sql file in migration
 	private Eruolo ruolo;
 
+	public Ruolo() {}
+	
 	public Ruolo(Long id, Eruolo ruolo) {
 		this.id = id;
 		this.ruolo = ruolo;
