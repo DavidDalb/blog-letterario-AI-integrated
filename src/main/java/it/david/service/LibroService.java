@@ -50,7 +50,7 @@ public class LibroService {
 
 		if (libroOpt.isEmpty()) {
 			log.warn("Libro con id {} non trovato", id);
-			throw new IllegalArgumentException("Id non può essere vuoto");
+			throw new IllegalArgumentException("Libro non trovato con id: " + id );
 		}
 		Libro libro = libroOpt.get();
 		log.info("Libro trovato: {}", libro.getTitolo());
