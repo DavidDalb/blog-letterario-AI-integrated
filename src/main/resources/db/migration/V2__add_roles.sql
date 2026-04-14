@@ -12,4 +12,4 @@ CREATE TABLE utente_ruoli (
 );
 
 INSERT INTO ruoli(nome_ruolo) VALUES('ROLE_UTENTE');
-INSERT INTO ruoli(nome_ruolo) VALUES('ROLE_AMMINISTRATORE);
+INSERT INTO ruoli(nome_ruolo) VALUES('ROLE_AMMINISTRATORE');
