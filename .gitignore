@@ -33,3 +33,5 @@ build/
 .vscode/
 .aider*
 .env
+bin/
+META-INF/
