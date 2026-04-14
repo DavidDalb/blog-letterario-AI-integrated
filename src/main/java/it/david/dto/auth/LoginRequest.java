@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotBlank;
 
 public class LoginRequest {
 
-	@NotBlank(message = "Username obbligatorio")
-	private String username;
+	@NotBlank(message = "Email obbligatoria")
+	private String email;
 	
 	@NotBlank(message = "Password obbligatoria")
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -15,12 +15,11 @@ public class LoginRequest {
 	
 	public LoginRequest() {}
 
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
-
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getPassword() {
