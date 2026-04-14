@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,6 +33,7 @@ public class LibroController {
 	}
 
 	@GetMapping // Userà l'url di default
+	//@PreAuthorize("hasRole('AMMINISTRATORE')")  //Commented: GESTITO DA PERMIT GLOBALE (WEBSECURITYCONFIG)
 	public ResponseEntity<Page<LibroDTO>> getAll(@PageableDefault(page = 0, size = 10, sort = "titolo") Pageable pageable) {
 		Page<LibroDTO> libri = libroService.findAll(pageable);
 		// Manda una risposta codice 200  
@@ -39,6 +41,7 @@ public class LibroController {
 	}
 
 	@GetMapping("/{id}")
+	//@PreAuthorize("hasAnyRole('UTENTE', 'AMMINISTRATORE')")   //Commented: GESTITO DA PERMIT GLOBALE (WEBSECURITYCONFIG)
 	public ResponseEntity<LibroDTO> getById(@PathVariable Long id) {
 		LibroDTO libro = libroService.findById(id);
 		return ResponseEntity.ok(libro);
@@ -61,6 +64,7 @@ public class LibroController {
 
 	}
 	@PostMapping                              //@Valid Serve a Validare con i parametri Validation dei DTO. @RequestBody Per accettare JSON 
+	@PreAuthorize("hasRole('AMMINISTRATORE')")
 	public ResponseEntity<LibroDTO> createLibro(@Valid @RequestBody LibroDTO libroDto) {
 		LibroDTO libro = libroService.saveLibro(libroDto);
 		
@@ -70,6 +74,7 @@ public class LibroController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('AMMINISTRATORE')")
 	                    //in <> non viaggerà niente 
 	public ResponseEntity<Void> deleteLibro(@PathVariable Long id) {
 		libroService.deleteLibroById(id);
@@ -80,6 +85,7 @@ public class LibroController {
 	}
 	
 	@PutMapping("/{id}")
+	@PreAuthorize("hasRole('AMMINISTRATORE')")
 	public ResponseEntity<LibroDTO> updateLibro(@PathVariable Long id, @Valid @RequestBody LibroDTO libroDto) {
 		
 		LibroDTO result = libroService.updateLibro(id, libroDto);

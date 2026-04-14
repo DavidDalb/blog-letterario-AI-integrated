@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,16 +52,19 @@ public class RecensioneController {
 		return ResponseEntity.ok(recensioni);
 	}
 	 @PostMapping
+	 @PreAuthorize("hasRole('UTENTE')")
 	 public ResponseEntity<RecensioneDTO> createRecensione(@Valid @RequestBody RecensioneDTO recensioneDto) {
 		 RecensioneDTO recensione = recensioneService.saveRecensione(recensioneDto);
 		 return new ResponseEntity<>(recensione, HttpStatus.CREATED);
 	 }
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('AMMINISTRATORE')")
 	public ResponseEntity<Void> deleteRecensione(@PathVariable Long id) {
 		recensioneService.deleteRecensioneById(id);
 		return ResponseEntity.noContent().build();
 	}
 	@PutMapping("/{id}")
+	@PreAuthorize("hasRole('AMMINISTRATORE')")
 	public ResponseEntity<RecensioneDTO> updateRecensione(@PathVariable Long id, @Valid @RequestBody RecensioneDTO recensioneDto) {
 		RecensioneDTO recensione = recensioneService.updateRecensione(id, recensioneDto);
 		return ResponseEntity.ok(recensione);
