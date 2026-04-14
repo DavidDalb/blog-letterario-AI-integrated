@@ -50,10 +50,13 @@ public class AiService {
                 });
         log.info("Generazione recensione AI per il libro '{}' di {}",libro.getTitolo(),libro.getAutore());
         String testoPrompt = """
-                Agisci come un critico letterario.
-                Analizza il libro "{titolo}" scritto da {autore}.
-                Il genere dell'opera è {genere}.
-                COMPITO: Genera una recensione professionale di 100 parole
+                Agisci come un critico letterario esperto.
+    Recensisci il libro "{titolo}" dell'autore {autore}, genere {genere}.
+    REGOLE RIGIDE:
+    1. Basati esclusivamente sulla trama reale del libro.
+    2. Non inventare ambientazioni o personaggi.
+    3. Mantieni un tono professionale e analitico.
+    4. Lunghezza: circa 100 parole.
                 """;
 
      // Sostituisce i segnaposto con i valori reali del libro
