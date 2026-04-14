@@ -3,14 +3,19 @@ package it.david.boot;
 import java.time.LocalDateTime;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import it.david.model.Eruolo;
 import it.david.model.Libro;
 import it.david.model.Recensione;
+import it.david.model.Ruolo;
 import it.david.model.Utente;
 import it.david.repository.LibroRepository;
 import it.david.repository.RecensioneRepository;
+import it.david.repository.RuoloRepository;
 import it.david.repository.UtenteRepository;
+import it.david.utility.StringCleanUtils;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -19,16 +24,25 @@ public class DataLoader implements CommandLineRunner {
 	private final LibroRepository libroRepository;
 	private final UtenteRepository utenteRepository;
 	private final RecensioneRepository recensioneRepository;
+	private final RuoloRepository ruoloRepository;
+	
+	private final PasswordEncoder passwordEncoder;
 
-	public DataLoader(LibroRepository libroRepository, UtenteRepository utenteRepository,
-			RecensioneRepository recensioneRepository) {
+	public DataLoader(LibroRepository libroRepository, UtenteRepository utenteRepository ,PasswordEncoder passwordEncoder,
+			RuoloRepository ruoloRepository, RecensioneRepository recensioneRepository) {
 		this.libroRepository = libroRepository;
 		this.utenteRepository = utenteRepository;
 		this.recensioneRepository = recensioneRepository;
+		this.passwordEncoder = passwordEncoder;
+		this.ruoloRepository = ruoloRepository;
+
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
+		
+		Ruolo ruoloUtente = ruoloRepository.findByRuolo(Eruolo.ROLE_UTENTE)
+				.orElseThrow(() -> new RuntimeException("Ruolo non trovato"));
 
 		if (libroRepository.count() > 0) {
 			System.out.println("I dati del DataLoader sono gia presenti");
@@ -37,8 +51,9 @@ public class DataLoader implements CommandLineRunner {
 
 		Utente u1 = new Utente();
 		u1.setUsername("Pasquale");
-		u1.setEmail("Pasquale@test.com");
-		u1.setPassword("password");
+		u1.setEmail(StringCleanUtils.cleanEmail("Pasquale@test.com"));
+		u1.setPassword(passwordEncoder.encode("password"));
+		u1.addRuolo(ruoloUtente);
 		utenteRepository.save(u1);
 
 		Libro l1 = new Libro();

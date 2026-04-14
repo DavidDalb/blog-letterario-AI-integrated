@@ -10,8 +10,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ch.qos.logback.core.util.StringUtil;
 import it.david.model.Utente;
 import it.david.repository.UtenteRepository;
+import it.david.utility.StringCleanUtils;
 
 @Service
 @Transactional(readOnly = true)
@@ -26,7 +28,10 @@ public class UserDetailsServiceImpl implements UserDetailsService{ //firma il co
 
 	@Override         //Metodo convenzionale
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		var utente = utenteRepository.findByEmail(email)
+		
+		String emailToLowerCase = StringCleanUtils.cleanEmail(email);
+		
+		var utente = utenteRepository.findByEmail(emailToLowerCase)
 	     .orElseThrow(() -> new UsernameNotFoundException("Email non trovata"));
 		
 		List<SimpleGrantedAuthority> authorities = utente.getRuoli().stream()

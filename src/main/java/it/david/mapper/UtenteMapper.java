@@ -19,6 +19,7 @@ public interface UtenteMapper {
 	@Mapping(target = "recensioni",ignore = true)
 	@Mapping(target = "password",ignore = true)  //La password va hashata nel service
 	@Mapping(target = "ruoli",ignore = true)     //i ruoli si cercano con il ruoloRepository nel service
+	@Mapping(target = "email",ignore = true)     //per manipolazione case insensitive
 	Utente toEntity(RegisterRequest registrationDto);
 	
 	@Mapping(target = "recensioni",ignore = true)

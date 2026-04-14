@@ -6,12 +6,12 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page; // Import per la paginazione
 import org.springframework.data.domain.Pageable; // Import per la paginazione
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +29,7 @@ import it.david.model.Utente;
 import it.david.repository.RuoloRepository;
 import it.david.repository.UtenteRepository;
 import it.david.security.jwt.JwtUtils;
+import it.david.utility.StringCleanUtils;
 
 @Service
 @Transactional(readOnly = true)
@@ -62,11 +63,14 @@ public class UtenteService {
 	public UtenteDTO register(RegisterRequest registrationDto) {
 		log.info("Tentativo di registrazione dell'utente {}", registrationDto.getUsername());
 	
-		if (utenteRepository.existsByEmail(registrationDto.getEmail())) {
-			log.warn("l'email {} esiste gia", registrationDto.getEmail());
+		String emailToLowerCase = StringCleanUtils.cleanEmail(registrationDto.getEmail());
+		
+		if (utenteRepository.existsByEmail(emailToLowerCase)) {
+			log.warn("l'email {} esiste gia", emailToLowerCase);
 			throw new IllegalArgumentException("Un utente con questa email esiste gia");
 		}
 		Utente utenteNuovo = utenteMapper.toEntity(registrationDto);
+		utenteNuovo.setEmail(emailToLowerCase);
 		utenteNuovo.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
 		
 		Set<Ruolo> ruoliDaSalvareDB = new HashSet<>();
@@ -95,8 +99,10 @@ public class UtenteService {
 	}
 	@Transactional
 	public JwtResponse login(LoginRequest loginRequest) {
+		String emailToLowerCase = StringCleanUtils.cleanEmail(loginRequest.getEmail());
+		
 		UsernamePasswordAuthenticationToken authInput = new UsernamePasswordAuthenticationToken(
-				loginRequest.getUsername(),
+				emailToLowerCase,
 				loginRequest.getPassword());
 		
 		Authentication authentication = authenticationManager.authenticate(authInput);
