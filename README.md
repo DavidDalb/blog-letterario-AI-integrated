@@ -1,144 +1,82 @@
 # Blog Letterario con Integrazione AI
 
-Questo progetto è un'applicazione Spring Boot che implementa un blog letterario completo, dove gli utenti possono gestire libri e recensioni. La caratteristica distintiva e innovativa è l'integrazione di un servizio di intelligenza artificiale (AI) che può generare recensioni di libri su richiesta, dimostrando capacità di integrazione con LLM (Large Language Models) locali. L'applicazione espone un'API RESTful sicura, ben documentata e robusta.
+[![Java](https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=openjdk)](https://www.oracle.com/java/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4-brightgreen?style=for-the-badge&logo=springboot)](https://spring.io/projects/spring-boot)
+[![Docker](https://img.shields.io/badge/Docker-Enabled-blue?style=for-the-badge&logo=docker)](https://www.docker.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue?style=for-the-badge&logo=postgresql)](https://www.postgresql.org/)
 
-## Descrizione del Progetto
+Un'applicazione backend moderna che combina la gestione di un blog letterario con la potenza dell'Intelligenza Artificiale locale. Questo progetto dimostra competenze nell'integrazione di **LLM (Large Language Models)**, sicurezza **JWT**, Containerizzazione e gestione del ciclo di vita dei servizi (App, DB, AI) tramite **Docker**.
 
-Il `Blog Letterario con Integrazione AI` è stato sviluppato con l'obiettivo di dimostrare competenze approfondite nello sviluppo backend, utilizzando il framework Spring Boot e le sue tecnologie correlate. Il sistema offre le seguenti funzionalità principali:
+---
 
-*   **Gestione Completa dei Libri**: Gli utenti possono creare, visualizzare, aggiornare ed eliminare i dettagli dei libri.
-*   **Gestione delle Recensioni Manuali**: Possibilità di inserire recensioni per i libri, con un sistema di valutazione a stelle.
-*   **Generazione di Recensioni tramite AI**: Utilizza l'integrazione con un Large Language Model (LLM) locale (tramite Ollama) per generare automaticamente recensioni per i libri, mostrando un'applicazione pratica dell'IA.
-*   **Sicurezza Robusta (JWT)**: Implementazione di un sistema di autenticazione e autorizzazione basato su JSON Web Token (JWT), con ruoli utente (es. `UTENTE`, `AMMINISTRATORE`) e controllo degli accessi granulare a livello di endpoint e metodi.
-*   **Validazione Dati Rigorosa**: Tutti i dati in ingresso vengono validati accuratamente per garantire l'integrità e la coerenza delle informazioni.
+## Caratteristiche Principali
 
-Questo progetto è ideale per mostrare una solida comprensione delle migliori pratiche di sviluppo software, inclusa la sicurezza, la persistenza dei dati, la validazione, l'integrazione con servizi esterni e la gestione centralizzata delle eccezioni.
+- **Generazione Recensioni AI**: Integrazione con **Ollama** (locale) per generare recensioni automatiche basate sul contenuto dei libri (modello `llama3.2:1b`).
+- **Sicurezza Robusta**: Autenticazione Stateless tramite **JWT (JSON Web Token)** con gestione dei ruoli (`UTENTE`, `AMMINISTRATORE`).
+- **Infrastruttura Containerizzata**: Deployment orchestrato con **Docker Compose** e **Multi-stage Build** per immagini leggere e sicure.
+- **Persistenza e Migrazioni**: Database PostgreSQL con gestione del versionamento dello schema tramite **Flyway**.
+- **Documentazione Interattiva**: Esplorazione completa degli endpoint tramite **Swagger UI (OpenAPI 3)**.
+- **Osservabilità**: Monitoraggio dello stato dei servizi tramite **Spring Boot Actuator**.
 
-## Funzionalità e Caratteristiche
-
-*   **API RESTful**: Interfacce chiare e consistenti per interagire con le risorse del blog (Libri, Recensioni, Utenti).
-*   **Spring Security & JWT**: Un'implementazione avanzata per proteggere gli endpoint, gestire l'autenticazione degli utenti e l'autorizzazione basata sui ruoli.
-*   **Integrazione AI con Spring AI e Ollama**: Capacità di sfruttare modelli di intelligenza artificiale locali per generare contenuti dinamici (recensioni di libri), dimostrando l'integrazione con piattaforme AI moderne.
-*   **Validazione dei Dati (DTO)**: Utilizzo di `@Valid` e annotazioni di validazione (es. `@NotBlank`, `@Size`, `@Email`, `@Min`, `@Max`) per mantenere l'integrità dei dati a livello di trasporto.
-*   **Persistenza Dati con Spring Data JPA**: Gestione efficiente e relazionale del database PostgreSQL, con entità ben definite (es. `Libro`, `Recensione`, `Utente`, `Ruolo`).
-*   **Database Migrations con Flyway**: Gestione controllata delle evoluzioni dello schema del database, garantendo che le modifiche siano applicate in modo affidabile e ripetibile.
-*   **Gestione Globale delle Eccezioni**: Un meccanismo centralizzato per gestire le eccezioni e fornire risposte di errore coerenti e significative ai client API.
-*   **Documentazione API Interattiva con OpenAPI (Swagger UI)**: Offre un'interfaccia utente grafica per esplorare, comprendere e testare tutti gli endpoint dell'API. mostra come l'API è strutturata e come interagire con essa.
+---
 
 ## Tecnologie Utilizzate
 
-*   **Backend**: Java 17+, Spring Boot 3
-*   **Framework ORM**: Spring Data JPA, Hibernate
-*   **Sicurezza**: Spring Security, JWT (JSON Web Tokens)
-*   **Database**: PostgreSQL
-*   **Gestione Dipendenze**: Apache Maven
-*   **AI Integration**: Spring AI, Ollama (per modelli LLM locali come `llama3.2:1b`)
-*   **Validazione**: Spring Validation (Jakarta Bean Validation)
-*   **Documentazione API**: OpenAPI 3 (Swagger UI)
-*   **Database Migrations**: Flyway
-*   **Logging**: SLF4J con Logback
+- **Backend**: Java 21, Spring Boot 3.4
+- **AI Integration**: Spring AI, Ollama
+- **Database**: PostgreSQL, Spring Data JPA, Flyway
+- **Security**: Spring Security, JWT
+- **DevOps**: Docker, Docker Compose
+- **Documentazione**: OpenAPI 3 (Swagger UI)
 
-## Requisiti
+---
 
-Per eseguire il progetto in locale, avrai bisogno di:
+## Installazione e Avvio Rapido
 
-*   **Java Development Kit (JDK) 17 o superiore**
-*   **Apache Maven 3.6 o superiore**
-*   **Docker** (fortemente consigliato per PostgreSQL e Ollama) oppure installazioni locali di:
-    *   **PostgreSQL**: Un'istanza del database.
-    *   **Ollama**: Installato e con il modello `llama3.2:1b` scaricato.
+Grazie all'integrazione Docker, non è necessario installare database o strumenti di build localmente.
 
-## Configurazione e Avvio Locale
-
-Segui questi passaggi per configurare ed eseguire il progetto sulla tua macchina locale.
-
-### 1. Clonare il Repository
-
+### 1. Clonazione del repository
 ```bash
-git clone <https://github.com/DavidDalb/blog-letterario-AI-integrated.git>
+git clone https://github.com/DavidDalb/blog-letterario-AI-integrated.git
 cd BlogLetterarioAI
 ```
 
-### 2. Configurazione del Database PostgreSQL
-
-Assicurati di avere un'istanza PostgreSQL in esecuzione. Ti suggerisco di usare Docker per la sua semplicità:
-
+### 2. Avvio dell'infrastruttura
+Lancia il comando per compilare l'applicazione (Multi-stage Build) e avviare tutti i servizi (App, DB, AI):
 ```bash
-docker run --name blog-db -e POSTGRES_DB=blog_db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=root -p 5432:5432 -d postgres:13
+docker-compose up -d --build
 ```
-Questo comando avvia un container PostgreSQL creando un database chiamato `blog_db` con utente `postgres` e password `root`, esposto sulla porta `5432`. Queste credenziali sono quelle configurate in `application.properties`.
 
-### 3. Configurazione di Ollama (per l'AI)
-
-Scarica e installa [Ollama](https://ollama.com/download) sul tuo sistema. Una volta installato e avviato il servizio Ollama, scarica il modello `llama3.2:1b` come specificato nella configurazione:
-
+### 3. Inizializzazione del modello AI (Una tantum)
+Scarica il modello Llama 3.2:1b all'interno del container Ollama per abilitare le funzionalità AI:
 ```bash
-ollama run llama3.2:1b
+docker exec -it ollama-service ollama pull llama3.2:1b
 ```
-Assicurati che Ollama sia in esecuzione e che il modello specificato sia disponibile. Di default, Ollama ascolterà su `http://localhost:11434`, come configurato nel progetto.
+---
+### Testing
+L'applicazione include un DataLoader che popola automaticamente il sistema con dati di test all'avvio.
 
-### 4. Verifica della Configurazione del Progetto
+Swagger UI: http://localhost:8080/swagger-ui.html
+Health Check: http://localhost:8080/actuator/health
 
-Il file `src/main/resources/application.properties` contiene tutte le configurazioni chiave. Ti prego di notare che le configurazioni fornite qui sotto sono già allineate con quelle presenti nel tuo file:
+### Credenziali di Test:
+username: David
+password: password
+(Ruolo utente)
 
-```properties
-# Database PostgreSQL
-spring.datasource.url=jdbc:postgresql://localhost:5432/blog_db
-spring.datasource.username=postgres
-spring.datasource.password=root
-spring.datasource.driver-class-name=org.postgresql.Driver
+### Procedura per il test:
+Effettua una POST a /api/auth/login con le credenziali sopra.
+Copia il token dalla risposta.
+Clicca sul tasto "Authorize" in Swagger e inserisci <IL_TUO_TOKEN>.
+Testa l'endpoint AI: /api/libri/{id}/recensioni/ai inserendo l'id del libro (id= 1)
 
-# Flyway Database Migrations (baseline-on-migrate è utile per database preesistenti)
-spring.flyway.baseline-on-migrate=true
+### Dettagli Tecnici (Environment)
+Le variabili di configurazione (password DB, segreti JWT) non sono state gestite nell'applicazione come variabili d'ambiente per favorire casi di Testing.
 
-# Spring AI con Ollama
-spring.ai.ollama.base-url=http://localhost:11434
-spring.ai.ollama.chat.options.model=llama3.2:1b # Assicurati che questo modello sia stato scaricato in Ollama
+### Roadmap Blog letterario Ai integrated:
+- Integrazione Vettoriale: Implementazione di pgvector su PostgreSQL 
+- Embedding Pipeline: Utilizzo di modelli di embedding tramite Spring AI per trasformare testi in vettori numerici.
+- RAG Context Provider: Sviluppo della logica per recuperare i pezzi di libro più pertinenti dal Vector Store e "istruire" l'LLM prima della generazione.
 
-# JWT (JSON Web Token)
-app.david.jwtSecret=CHIAVE_DI_FIRMA_PER_TEST_LOCALE_PROGETTO_SECURITY_DAVID_LUNGA_64_CARATTERI # IMPORTANTISSIMO: In produzione, usa una variabile d'ambiente o un Vault!
-app.david.jwtExpirationMs=86400000 # 24 ore in millisecondi
-```
-**Nota sulla Sicurezza**: La `jwtSecret` è attualmente nel file di configurazione per scopi di sviluppo locale. In un ambiente di produzione, questa chiave viene gestita in modo estremamente sicuro, preferibilmente tramite variabili d'ambiente o un servizio di gestione segreti (es. HashiCorp Vault, AWS Secrets Manager).
-
-### 5. Esecuzione dell'Applicazione
-
-Puoi avviare l'applicazione utilizzando Maven:
-
-```bash
-mvn spring-boot:run
-```
-L'applicazione sarà disponibile su `http://localhost:8080`.
-
-## Endpoint API Principali e Accesso a Swagger UI
-
-Una volta che l'applicazione è in esecuzione, la documentazione interattiva dell'API è accessibile tramite Swagger UI:
-
-*   **Swagger UI**: `http://localhost:8080/swagger-ui.html`
-
-**Come Accedere e Testare le API Protette da JWT con Swagger:**
-
-1.  Apri l'URL di Swagger UI nel tuo browser.
-2.  **Registrazione**: Utilizza l'endpoint `POST /api/auth/register` per registrare un nuovo utente. Puoi provare con un ruolo `UTENTE`.
-3.  **Login**: Utilizza l'endpoint `POST /api/auth/login` per autenticarti. Ti verrà restituito un **JWT (JSON Web Token)**.
-4.  **Autorizzazione in Swagger**:
-    *   In cima alla pagina di Swagger, troverai un pulsante o un'icona **"Authorize"** (o un lucchetto). Cliccaci sopra.
-    *   Inserisci il JWT che hai ottenuto dal login nel campo `Value`, preceduto dalla parola `Bearer ` (con uno spazio), ad esempio: `Bearer <IL_TUO_TOKEN_QUI>`.
-    *   Clicca su "Authorize" e poi "Close".
-5.  Ora potrai interagire con tutti gli endpoint protetti, Swagger invierà automaticamente il JWT in ogni richiesta, permettendoti di testare le funzionalità che richiedono autenticazione e specifici ruoli (es. creare un libro, aggiungere recensioni, generare recensioni AI).
-
-### Esempi di Endpoint:
-
-*   `POST /api/auth/register`: Registra un nuovo utente con username, email, password e ruoli.
-*   `POST /api/auth/login`: Accedi al sistema e ottieni il tuo token JWT.
-*   `GET /api/libri`: Recupera l'elenco di tutti i libri (pubblico).
-*   `POST /api/libri`: Crea un nuovo libro (richiede JWT, ruolo `AMMINISTRATORE` o `UTENTE`).
-*   `GET /api/libri/{libroId}`: Recupera i dettagli di un libro specifico.
-*   `POST /api/libri/{libroId}/recensioni`: Aggiungi una recensione manuale a un libro (richiede JWT, ruolo `UTENTE`).
-*   `GET /api/libri/{libroId}/recensioni/ai`: **Genera una recensione per un libro utilizzando l'AI** (richiede JWT, ruolo `UTENTE`). Questo endpoint interagirà con Ollama.
-
-## Contatto
-
-Per qualsiasi domanda o chiarimento sul progetto, non esitare a contattarmi:
-
-*   **Email**: [dalbenziodavide01@gmail.com]
+### Contatti
+Davide Dalbenzio - dalbenziodavide01@gmail.com
